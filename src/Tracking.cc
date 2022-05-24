@@ -1851,6 +1851,9 @@ void Tracking::Track()
                 }
                 return;
             }
+            else {
+                CreateMapInAtlas();
+            }
 
         }
     }

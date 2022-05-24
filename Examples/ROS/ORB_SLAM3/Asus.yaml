@@ -3,39 +3,43 @@
 #--------------------------------------------------------------------------------------------
 # Camera Parameters. Adjust them!
 #--------------------------------------------------------------------------------------------
-File.version: "1.0"
-
 Camera.type: "PinHole"
 
-# Left Camera calibration and distortion parameters (OpenCV)
-Camera1.fx: 382.613
-Camera1.fy: 382.613
-Camera1.cx: 320.183
-Camera1.cy: 236.455
+# Camera calibration and distortion parameters (OpenCV) 
+Camera.fx: 535.4
+Camera.fy: 539.2
+Camera.cx: 320.1
+Camera.cy: 247.6
 
-# distortion parameters
-Camera1.k1: 0.0
-Camera1.k2: 0.0
-Camera1.p1: 0.0
-Camera1.p2: 0.0
+Camera.k1: 0.0
+Camera.k2: 0.0
+Camera.p1: 0.0
+Camera.p2: 0.0
 
-# Camera resolution
 Camera.width: 640
 Camera.height: 480
-#Camera.width: 1280
-#Camera.height: 720
 
 # Camera frames per second 
-Camera.fps: 30
+Camera.fps: 30.0
+
+# IR projector baseline times fx (aprox.)
+Camera.bf: 40.0
 
 # Color order of the images (0: BGR, 1: RGB. It is ignored if images are grayscale)
 Camera.RGB: 1
 
+# Close/Far threshold. Baseline times.
+ThDepth: 40.0
+
+# Deptmap values factor
+DepthMapFactor: 1.0
+
 #--------------------------------------------------------------------------------------------
 # ORB Parameters
 #--------------------------------------------------------------------------------------------
+
 # ORB Extractor: Number of features per image
-ORBextractor.nFeatures: 1250
+ORBextractor.nFeatures: 1000
 
 # ORB Extractor: Scale factor between levels in the scale pyramid 	
 ORBextractor.scaleFactor: 1.2
@@ -54,12 +58,13 @@ ORBextractor.minThFAST: 7
 # Viewer Parameters
 #--------------------------------------------------------------------------------------------
 Viewer.KeyFrameSize: 0.05
-Viewer.KeyFrameLineWidth: 1.0
+Viewer.KeyFrameLineWidth: 1
 Viewer.GraphLineWidth: 0.9
-Viewer.PointSize: 2.0
+Viewer.PointSize:2
 Viewer.CameraSize: 0.08
-Viewer.CameraLineWidth: 3.0
-Viewer.ViewpointX: 0.0
+Viewer.CameraLineWidth: 3
+Viewer.ViewpointX: 0
 Viewer.ViewpointY: -0.7
-Viewer.ViewpointZ: -3.5
-Viewer.ViewpointF: 500.0
+Viewer.ViewpointZ: -1.8
+Viewer.ViewpointF: 500
+
