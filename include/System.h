@@ -39,6 +39,7 @@
 #include "Viewer.h"
 #include "ImuTypes.h"
 #include "Settings.h"
+#include "PointCloudMapping.h"
 
 
 namespace ORB_SLAM3
@@ -79,6 +80,7 @@ class Tracking;
 class LocalMapping;
 class LoopClosing;
 class Settings;
+class PointCloudMapping;
 
 class System
 {
@@ -254,6 +256,10 @@ private:
     std::vector<MapPoint*> mTrackedMapPoints;
     std::vector<cv::KeyPoint> mTrackedKeyPointsUn;
     std::mutex mMutexState;
+
+
+    // Point Cloud Mapping
+    boost::shared_ptr<PointCloudMapping> mpPointCloudMapping;
 
     //
     string mStrLoadAtlasFromFile;

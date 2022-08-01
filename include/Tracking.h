@@ -36,9 +36,11 @@
 #include "System.h"
 #include "ImuTypes.h"
 #include "Settings.h"
+#include "PointCloudMapping.h"
 
 #include "GeometricCamera.h"
 
+#include "boost/make_shared.hpp"
 #include <mutex>
 #include <unordered_set>
 
@@ -52,6 +54,7 @@ class LocalMapping;
 class LoopClosing;
 class System;
 class Settings;
+class PointCloudMapping;
 
 class Tracking
 {  
@@ -59,6 +62,7 @@ class Tracking
 public:
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     Tracking(System* pSys, ORBVocabulary* pVoc, FrameDrawer* pFrameDrawer, MapDrawer* pMapDrawer, Atlas* pAtlas,
+            boost::shared_ptr<PointCloudMapping> pPointCloud,
              KeyFrameDatabase* pKFDB, const string &strSettingPath, const int sensor, Settings* settings, const string &_nameSeq=std::string());
 
     ~Tracking();
@@ -139,6 +143,8 @@ public:
     Frame mLastFrame;
 
     cv::Mat mImGray;
+    cv::Mat mImDepth; // pointcloud
+    cv::Mat mImRGB; // color point map
 
     // Initialization Variables (Monocular)
     std::vector<int> mvIniLastMatches;
@@ -336,6 +342,9 @@ protected:
     bool mbRGB;
 
     list<MapPoint*> mlpTemporalPoints;
+
+    // point cloud viewing
+    boost::shared_ptr<PointCloudMapping> mpPointCloudMapping;
 
     //int nMapChangeIndex;
 

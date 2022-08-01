@@ -30,6 +30,9 @@
 
 #include "../../../include/System.h"
 
+#include <geometry_msgs/PoseStamped.h>
+#include <Eigen/Geometry>
+
 using namespace std;
 
 class ImageGrabber
@@ -40,6 +43,7 @@ public:
     void GrabImage(const sensor_msgs::ImageConstPtr &msg);
 
     ORB_SLAM3::System *mpSLAM;
+    ros::Publisher pub;
 };
 
 int main(int argc, char **argv)
@@ -61,7 +65,10 @@ int main(int argc, char **argv)
     ImageGrabber igb(&SLAM);
 
     ros::NodeHandle nodeHandler;
-    ros::Subscriber sub = nodeHandler.subscribe("/camera/color/image_raw", 1, &ImageGrabber::GrabImage, &igb);
+    ros::Subscriber sub = nodeHandler.subscribe("/cam0/image_raw", 1, &ImageGrabber::GrabImage, &igb);
+    //ros::Subscriber sub = nodeHandler.subscribe("/camera/color/image_raw", 1, &ImageGrabber::GrabImage, &igb);
+
+    igb.pub = nodeHandler.advertise<geometry_msgs::PoseStamped>("/orbslam_pose", 100, true);
 
     ros::spin();
 
@@ -92,4 +99,22 @@ void ImageGrabber::GrabImage(const sensor_msgs::ImageConstPtr &msg)
 
     Sophus::SE3f pose = mpSLAM->TrackMonocular(cv_ptr->image, cv_ptr->header.stamp.toSec());
     ROS_INFO("Pose: X: %f, Y:%f, Z:%f", pose.translation()(0), pose.translation()(1), pose.translation()(2));
+
+    Eigen::Vector3f translation = pose.translation();
+    Eigen::Quaternionf quaternion = pose.unit_quaternion();
+
+
+    geometry_msgs::PoseStamped poseStamp;
+    poseStamp.pose.position.x = translation.x();
+    poseStamp.pose.position.y = translation.y();
+    poseStamp.pose.position.z = translation.z();
+    poseStamp.pose.orientation.w = quaternion.w();
+    poseStamp.pose.orientation.x = quaternion.x();
+    poseStamp.pose.orientation.y = quaternion.y();
+    poseStamp.pose.orientation.z = quaternion.z();
+
+    poseStamp.header.stamp = msg->header.stamp;
+
+
+    pub.publish(poseStamp);
 }
